@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+
+<script>
+  var callbacks = [];
+
+  for (var i = 0; i <= 2; i++) {
+    callbacks[i] = function () {
+      return i * 2;
+    }
+  }
+
+  console.table([
+    callbacks[0](),
+    callbacks[1](),
+    callbacks[2]()
+  ]);
+
+  function Foo () {
+    getName = function () {
+      console.log(1);
+    };
+    return this;
+  }
+  Foo.getName = function () {
+    console.log(2);
+  }
+  Foo.prototype.getName = function () {
+    console.log(3);
+  }
+  var getName = function () {
+    console.log(4);
+  }
+  function getName () {
+    console.log(5);
+  }
+
+  Foo.getName();
+  getName();
+  Foo().getName();
+  getName();
+  new Foo.getName();
+  new Foo().getName();
+  new new Foo().getName();
+
+
+  //ES6 proxy
+
+  let Person = {
+    name: 'fqt',
+    age:18,
+    sex: 'famale'
+  };
+
+  // Object.defineProperty(person, 'adress', {
+  //   writable: false,
+  //   value: '江西九江修水'
+  // });
+
+  // person.adress = '2222';
+  // console.log(person);
+
+  let person = new Proxy(Person, {
+    get(target, key) {
+      return target[key]
+    },
+    set (target, key, value) {
+      if (key !== 'sex') {
+        target[key] = value;
+      }
+    }
+  });
+
+  console.log(person.name);
+  person.age = 20;
+  person.sex = 'male';
+  console.log(person.age);
+  console.log(person.sex);
+
+</script>
+</html>
